@@ -88,6 +88,12 @@ export async function registerENSName(ensName, signer) {
   return await contract.registerENSName(ensName);
 }
 
+export async function hasENSName(address, provider) {
+  const contract = await getReputationSystem(provider);
+  const ensName = await contract.getENSName(address);
+  return ensName && ensName !== "";
+}
+
 // Get the user's rank based on reputation
 export function getUserRank(reputation) {
   if (reputation >= 200) return { rank: "Leader", level: 5 };

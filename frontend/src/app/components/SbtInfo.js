@@ -28,7 +28,7 @@ export default function SbtInfo() {
   };
 
   // Convert IPFS URL to HTTP gateway URL
-  const getHttpUrl = (ipfsUrl) => {
+  const getHttpUrl = (ipfsUrl, tokenLevel) => {
     if (!ipfsUrl) return null;
 
     // Extract the IPFS hash
@@ -45,14 +45,36 @@ export default function SbtInfo() {
 
     // Determine the appropriate filename based on level
     let fileName = "token.png";
-    if (level === 1) fileName = fileNames.human;
-    if (level === 2) fileName = fileNames.member;
-    if (level === 3) fileName = fileNames.voter;
-    if (level === 4) fileName = fileNames.organizer;
-    if (level === 5) fileName = fileNames.leader;
+    if (tokenLevel === 1) fileName = fileNames.human;
+    if (tokenLevel === 2) fileName = fileNames.member;
+    if (tokenLevel === 3) fileName = fileNames.voter;
+    if (tokenLevel === 4) fileName = fileNames.organizer;
+    if (tokenLevel === 5) fileName = fileNames.leader;
 
-    // Return formatted URL with filename
+    // Primary gateway with fallback options
     return `https://ipfs.io/ipfs/${hash}?filename=${fileName}`;
+  };
+
+  // Handle image loading errors with fallback gateways
+  const handleImageError = (e) => {
+    const img = e.target;
+    const currentSrc = img.src;
+
+    // If using ipfs.io, try cloudflare-ipfs.com
+    if (currentSrc.includes("ipfs.io")) {
+      const newSrc = currentSrc.replace("ipfs.io", "cloudflare-ipfs.com");
+      img.src = newSrc;
+    }
+    // If using cloudflare, try dweb.link
+    else if (currentSrc.includes("cloudflare-ipfs.com")) {
+      const newSrc = currentSrc.replace("cloudflare-ipfs.com", "dweb.link");
+      img.src = newSrc;
+    }
+    // If all gateways fail, use placeholder
+    else {
+      img.onerror = null; // Prevent infinite fallback loop
+      img.src = "/placeholder-token.png";
+    }
   };
 
   useEffect(() => {
@@ -86,11 +108,11 @@ export default function SbtInfo() {
 
   // Determine which token URI to use based on rank
   const getTokenImageUrl = () => {
-    if (level === 5) return getHttpUrl(tokenURIs.leader);
-    if (level === 4) return getHttpUrl(tokenURIs.organizer);
-    if (level === 3) return getHttpUrl(tokenURIs.voter);
-    if (level === 2) return getHttpUrl(tokenURIs.member);
-    if (level === 1) return getHttpUrl(tokenURIs.human);
+    if (level === 5) return getHttpUrl(tokenURIs.leader, level);
+    if (level === 4) return getHttpUrl(tokenURIs.organizer, level);
+    if (level === 3) return getHttpUrl(tokenURIs.voter, level);
+    if (level === 2) return getHttpUrl(tokenURIs.member, level);
+    if (level === 1) return getHttpUrl(tokenURIs.human, level);
     return null;
   };
 
@@ -126,10 +148,7 @@ export default function SbtInfo() {
                     alt={`${rank} Token`}
                     className="object-cover"
                     style={{ width: "100%", height: "100%" }}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/placeholder-token.png";
-                    }}
+                    onError={handleImageError}
                   />
                 </div>
               </div>

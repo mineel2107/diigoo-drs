@@ -25,6 +25,12 @@ export default function UserProfile() {
   const { data: ensName } = useEnsName({ address });
 
   useEffect(() => {
+    // Reset state when address changes
+    setContractEnsName("");
+    setReputation(0);
+    setIsVerified(false);
+    setTokenBalance(0);
+
     async function fetchUserData() {
       if (isConnected && address) {
         setLoading(true);
@@ -42,12 +48,11 @@ export default function UserProfile() {
             setTokenBalance(Number(balance));
 
             const ensFromContract = await getENSName(address, provider);
-            if (ensFromContract) {
-              setContractEnsName(ensFromContract);
-            }
+            setContractEnsName(ensFromContract || ""); // Explicitly set to empty string if null or undefined
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
+          setContractEnsName(""); // Ensure ENS is cleared on error
         } finally {
           setLoading(false);
         }

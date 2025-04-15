@@ -8,7 +8,7 @@
 A decentralized reputation system that rewards community participation with Soul Bound Tokens (SBTs). This project includes both smart contracts and a frontend interface that allows users to earn reputation through various actions and receive non-transferable tokens that represent their status in the community.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/1234567/example-image.png" alt="DiigooDAO Screenshot" width="600">
+  <img src="https://github.com/user-attachments/assets/38502cc6-bc41-4a44-8676-489296f7d9db" alt="DiigooDAO Screenshot" width="600">
 </p>
 
 ## Project Overview

@@ -21,6 +21,11 @@ DiigooDAO Reputation System is built to:
 - Enable ENS name registration for easy identification within the ecosystem
 - Provide visual representation of status through different token tiers
 
+## Live Links
+
+- [Live Demo](https://diigoo-drs.vercel.app/) - Try out the DiigooDAO Reputation System
+- [Video Demonstration](https://www.loom.com/share/68b6af32aa47445faab342ee1b330937?sid=73a5d745-731b-4d2e-9e30-eeaae6ddbacd) - Watch how the system works
+
 ## Repository Structure
 
 - `backend/`: Smart contracts written in Solidity using the Foundry framework
